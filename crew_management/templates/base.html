@@ -1,0 +1,196 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Crew Management System{% endblock %}</title>
+    <!-- Import Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"
+    />
+    <!-- Global Stylesheets -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="{% static 'css/style.bundle.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="{% static 'plugins/global/plugins.bundle.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <style>
+      #flash-messages {
+        pointer-events: none;
+      }
+
+      .alert {
+        pointer-events: auto;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: transform 0.5s ease, opacity 0.5s ease;
+      }
+
+      .alert.slide-in {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .alert.slide-out {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+
+      /* Sidebar styles */
+      #sidebar {
+        z-index: 1000;
+        transition: all 0.3s;
+      }
+
+      @media (max-width: 991.98px) {
+        #sidebar {
+          position: fixed;
+          top: 0;
+          left: -250px;
+          height: 100vh;
+          width: 250px;
+          transition: 0.3s;
+        }
+        #sidebar.show {
+          left: 0;
+        }
+      }
+
+      .nav-link {
+        color: #495057;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .nav-link:hover {
+        background-color: #e9ecef;
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .nav-link.active {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .nav-link i {
+        font-size: 1.1rem;
+        color: #6c757d;
+      }
+
+      /* Main content styles */
+      .ms-lg-250 {
+        transition: margin-left 0.3s;
+      }
+
+      @media (min-width: 992px) {
+        .ms-lg-250 {
+          margin-left: 250px;
+        }
+      }
+
+      @media (max-width: 991.98px) {
+        .ms-lg-250 {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="app-default">
+    <!-- Header -->
+    <div id="kt_app_header" class="app-header bg-light">
+      <div
+        class="app-container container-fluid d-flex justify-content-between align-items-center"
+      >
+        <a href="/" class="navbar-brand text-primary">Crew Management System</a>
+      
+        <ul class="navbar-nav d-flex align-items-center">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Flash Messages -->
+    <div
+      id="flash-messages"
+      class="position-fixed top-0 end-0 p-3"
+      style="z-index: 1050; max-width: 300px"
+    >
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show slide-in"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Content Block -->
+    <div class="container-fluid p-0">{% block content %}{% endblock %}</div>
+
+
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const alerts = document.querySelectorAll("#flash-messages .alert");
+        alerts.forEach((alert) => {
+          setTimeout(() => {
+            alert.classList.remove("slide-in");
+            alert.classList.add("slide-out");
+            setTimeout(() => alert.remove(), 500);
+          }, 3000);
+        });
+
+        // Toggle sidebar on mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.querySelector('[data-bs-toggle="collapse"][data-bs-target="#sidebar"]');
+        if (sidebarToggle && sidebar) {
+          sidebarToggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            sidebar.classList.toggle('show');
+          });
+
+          // Close sidebar when clicking outside of it
+          document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && sidebar.classList.contains('show')) {
+              sidebar.classList.remove('show');
+            }
+          });
+        }
+      });
+    </script>
+
+    <script src="{% static 'plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'js/scripts.bundle.js' %}"></script>
+  </body>
+</html>
+

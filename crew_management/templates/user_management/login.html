@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <div class="col-md-6">
+        <h2 class="mb-4">Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="card-body">
+                <!--begin::Heading-->
+                <div class="text-start mb-10">
+                    <h1 class="text-dark mb-3 fs-3x">Sign In</h1>
+                </div>
+                <!--end::Heading-->
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <!--begin::Actions-->
+                <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10">
+                    <div></div>
+                    <a href="#" class="link-primary">Forgot Password?</a>
+                </div>
+                <div class="d-flex flex-stack">
+                    <button type="submit" class="btn btn-primary me-2 flex-shrink-0">Sign In</button>
+                </div>
+                <!--end::Actions-->
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
