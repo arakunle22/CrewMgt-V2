@@ -34,41 +34,49 @@ If you find this project helpful, don't forget to ADD a STAR ⭐️  to this rep
 
 ## 📸 Screenshots
 <!-- Landing Page -->
+- Landing Page
 <img src="app-review/1.png"/>
 
 <!-- Sign-In Page -->
+- Sign-In Page
 <img src="app-review/2.png"/>
 
 <!-- Sign-Up Page -->
+- Sign-Up Page
 <img src="app-review/4.png"/>
 
 <!-- Crew Dashboard -->
+- Crew Dashboard
 <img src="app-review/5.png"/>
 
-<!-- Clock-In Success -->
+<!-- Clock-In Successful -->
+- Clock-In Successful
 <img src="app-review/6.png"/>
 
 <!-- Attendance Page -->
+- Attendance Page
 <img src="app-review/7.png"/>
 
 <!-- Task Page -->
+- Task Page
 <img src="app-review/8.png"/>
 
 <!-- Shift Schedule Page -->
+- Shift Schedule Page
 <img src="app-review/9.png"/>
 
 <!-- Leave Management Page -->
+-  Leave Management Page 
 <img src="app-review/10.png"/>
 
 <!-- Leave Request Page -->
+- Leave Request Page 
 <img src="app-review/11.png"/>
 
 ## Support the Developer
 1. Add a Star 🌟  to this Repository.
 2. Follow on Twitter/Github.
 
-## Images
-Images are sourced from [Unsplash](https://unsplash.com).
 
 ## How to Install and Run this Project
 
