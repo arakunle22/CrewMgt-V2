@@ -1,4 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'layout/base.html' %}
+{% block greet %}
+Welcome, {{ user.username }}!
+{% endblock %}
+
+{% block target %}
+Shift Schedule
+{% endblock  %}
+
 {% block content %}
 <div class="container mt-4">
     <h2 class="mb-4">Shift Schedule</h2>

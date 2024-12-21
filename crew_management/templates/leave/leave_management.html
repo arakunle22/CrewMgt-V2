@@ -1,0 +1,157 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block greet %}
+Leave Management
+{% endblock %}
+
+{% block target %}
+Leave Requests
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Your Leave Requests</h3>
+        <div class="card-toolbar">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#leaveRequestModal">
+                New Leave Request
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+            <thead>
+                <tr class="fw-bold text-muted">
+                    <th>Leave Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave_request in leave_requests %}
+                <tr>
+                    <td>{{ leave_request.leave_type.name }}</td>
+                    <td>{{ leave_request.start_date }}</td>
+                    <td>{{ leave_request.end_date }}</td>
+                    <td>
+                        <span class="badge badge-light-{% if leave_request.status == 'approved' %}success{% elif leave_request.status == 'rejected' %}danger{% else %}warning{% endif %}">
+                            {{ leave_request.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No leave requests found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Leave Request Modal -->
+<div class="modal fade" id="leaveRequestModal" tabindex="-1" aria-labelledby="leaveRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" id="leave-request-form">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="leaveRequestModalLabel">Submit Leave Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-5">
+                        <label class="form-label" for="{{ form.leave_type.id_for_label }}">Leave Type</label>
+                        {{ form.leave_type }}
+                        <div id="days-allowed" class="form-text mt-2"></div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.start_date.id_for_label }}">Start Date</label>
+                            {{ form.start_date }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.end_date.id_for_label }}">End Date</label>
+                            {{ form.end_date }}
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label" for="{{ form.reason.id_for_label }}">Reason</label>
+                        {{ form.reason }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="leaveTypesData" data-leave-types="{{ leave_types_json }}" style="display: none;"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('leave-request-form');
+        const modal = document.getElementById('leaveRequestModal');
+        const leaveTypeSelect = document.getElementById('{{ form.leave_type.id_for_label }}');
+        const daysAllowedDiv = document.getElementById('days-allowed');
+        
+        const leaveTypesData = document.getElementById('leaveTypesData');
+        const leaveTypes = JSON.parse(leaveTypesData.dataset.leaveTypes);
+
+        leaveTypeSelect.addEventListener('change', function() {
+            const selectedLeaveType = leaveTypes[this.value];
+            if (selectedLeaveType) {
+                daysAllowedDiv.textContent = `Days allowed: ${selectedLeaveType.days_allowed}`;
+            } else {
+                daysAllowedDiv.textContent = '';
+            }
+        });
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            if (validateForm()) {
+                this.submit();
+            }
+        });
+
+        function validateForm() {
+            // Add your form validation logic here
+            return true; // Return true if the form is valid, false otherwise
+        }
+
+        // Reset form when modal is hidden
+        modal.addEventListener('hidden.bs.modal', function () {
+            form.reset();
+            daysAllowedDiv.textContent = '';
+        });
+
+        // Show success message using SweetAlert2 if available
+        {% if messages %}
+            {% for message in messages %}
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        text: "{{ message }}",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                } else {
+                    alert("{{ message }}");
+                }
+            {% endfor %}
+        {% endif %}
+    });
+</script>
+{% endblock %}
+

@@ -14,7 +14,7 @@ from django.utils import timezone
 
 
 def landing_page(request):
-    return render(request, 'crew_mgt/index.html')
+    return render(request, 'landing_page/landing_page.html')
 
 def register(request):
     if request.method == 'POST':

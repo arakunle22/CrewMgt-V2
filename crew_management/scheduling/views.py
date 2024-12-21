@@ -3,6 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Shift, Schedule, Availability
 from .forms import AvailabilityForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
+from django.db.models import Q
+from django.contrib import messages
+from .models import Shift, Schedule, Availability
+from .forms import AvailabilityForm
 
 @login_required
 def dashboard(request):
@@ -74,3 +81,67 @@ def clock_in(user):
 def clock_out(user):
     # Implement clock-out logic
     pass
+
+@login_required
+@user_passes_test(lambda u: u.role == 'crew_member')
+def shift_schedule(request):
+    user = request.user
+    today = timezone.now().date()
+    upcoming_shifts = Schedule.objects.filter(user=user, date__gte=today).order_by('date')
+    
+    context = {
+        'upcoming_shifts': upcoming_shifts,
+    }
+    return render(request, 'scheduling/shift_schedule.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.role == 'crew_member')
+def availability(request):
+    user = request.user
+    
+    if request.method == 'POST':
+        form = AvailabilityForm(request.POST)
+        if form.is_valid():
+            availability = form.save(commit=False)
+            availability.user = user
+            availability.save()
+            messages.success(request, 'Availability added successfully.')
+            return redirect('availability')
+    else:
+        form = AvailabilityForm()
+    
+    availabilities = Availability.objects.filter(user=user).order_by('date')
+    
+    context = {
+        'form': form,
+        'availabilities': availabilities,
+    }
+    return render(request, 'scheduling/availability.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.role == 'crew_member')
+def shift_and_availability(request):
+    user = request.user
+    today = timezone.now().date()
+    
+    shifts = Schedule.objects.filter(user=user, date__gte=today).order_by('date')
+
+    if request.method == 'POST':
+        form = AvailabilityForm(request.POST)
+        if form.is_valid():
+            availability = form.save(commit=False)
+            availability.user = user
+            availability.save()
+            messages.success(request, 'Availability added successfully.')
+            return redirect('shift_and_availability')
+    else:
+        form = AvailabilityForm()
+
+    availabilities = Availability.objects.filter(user=user, date__gte=today).order_by('date')
+
+    context = {
+        'shifts': shifts,
+        'availabilities': availabilities,
+        'form': form,
+    }
+    return render(request, 'scheduling/shift_and_availability.html', context)

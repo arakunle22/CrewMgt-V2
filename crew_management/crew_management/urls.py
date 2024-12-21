@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('attendance.urls')),
     path('', include('task_management.urls')),
     path('', include('scheduling.urls')),
+    path('', include('leave_management.urls')),
 ]

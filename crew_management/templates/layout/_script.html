@@ -1,0 +1,18 @@
+{% load static %}
+<div class="scripts">
+    <script>var hostUrl = "{% static 'crew_management/assets/' %}";</script>
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="{% static 'crew_management/assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/scripts.bundle.js' %}"></script>
+    <!--end::Global Javascript Bundle-->
+    
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="{% static 'crew_management/assets/js/widgets.bundle.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/custom/widgets.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/custom/apps/chat/chat.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/custom/utilities/modals/upgrade-plan.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/custom/utilities/modals/create-app.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/custom/utilities/modals/new-target.js' %}"></script>
+    <script src="{% static 'crew_management/assets/js/custom/utilities/modals/users-search.js' %}"></script>
+    <!--end::Custom Javascript-->
+</div> 

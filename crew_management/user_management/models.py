@@ -1,7 +1,24 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
 
 class CustomUser(AbstractUser):
+    username_validator = UnicodeUsernameValidator()
+
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        validators=[username_validator],
+        error_messages={
+            'unique': "A user with that username already exists.",
+        },
+    )
+    email = models.EmailField(
+        unique=True,
+        error_messages={
+            'unique': "A user with that email already exists.",
+        },
+    )
     ROLE_CHOICES = [
         ('crew_member', 'Crew Member'),
         ('manager', 'Manager'),
@@ -13,6 +30,7 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

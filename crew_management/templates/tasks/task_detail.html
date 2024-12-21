@@ -1,9 +1,17 @@
-{% extends 'user_management/crew_dashboard.html' %}
+{% extends 'layout/base.html' %}
 {% load static %}
 
 {% block page_title %}Task - Details{% endblock %}
 
-{% block portal_content %}
+{% block greet %}
+Welcome, {{ user.username }}!
+{% endblock %}
+
+{% block target %}
+Task : Details
+{% endblock  %}
+
+{% block content %}
 <div class="d-flex flex-column flex-lg-row">
    
 

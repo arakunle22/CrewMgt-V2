@@ -1,0 +1,45 @@
+{% load static %}
+
+<head><base href=""/>
+    <title>{% block title %} Crew Management System {% endblock %}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--begin::Fonts(mandatory for all pages)-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <!--end::Fonts-->
+
+    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <link href="{% static 'crew_management/assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'crew_management/assets/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+
+    <style>
+        /* Flash Messgae */
+        #flash-messages {
+        pointer-events: none;
+      }
+
+      .alert {
+        pointer-events: auto;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: transform 0.5s ease, opacity 0.5s ease;
+      }
+
+      .alert.slide-in {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .alert.slide-out {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    </style>
+
+    <script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
+</head>
